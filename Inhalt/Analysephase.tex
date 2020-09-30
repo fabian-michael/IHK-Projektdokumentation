@@ -102,10 +102,38 @@ Ein Beispiel für ein Use Case-Diagramm findet sich im \Anhang{app:UseCase}.
 
 \subsection{Lastenheft/Fachkonzept}
 \label{sec:Lastenheft}
-\begin{itemize}
-	\item Auszüge aus dem Lastenheft/Fachkonzept, wenn es im Rahmen des Projekts erstellt wurde.
-	\item Mögliche Inhalte: Funktionen des Programms (Muss/Soll/Wunsch), User Stories, Benutzerrollen
-\end{itemize}
 
-\paragraph{Beispiel}
-Ein Beispiel für ein Lastenheft findet sich im \Anhang{app:Lastenheft}. 
+Die Anwendung muss folgende Anforderungen erfüllen: 
+\begin{itemize}[itemsep=0em,partopsep=0em,parsep=0em,topsep=0em]
+\item Kompabilität
+	\begin{itemize}
+		\item Die Extension muss sowohl mit TYPO3 8.7 als auch mit TYPO3 9.5 oder höher kompatibel sein.
+		\item Es dürfen keine TYPO3 Features/APIs verwendet werden, welche ab TYPO3 9.5 deprecated sind.
+	\end{itemize}
+\item Allgemein
+	\begin{itemize}
+		\item Die Extension soll ein reines Entwicklerwerkzeug sein. Die Frontend-Umsetzung für den Endnutzer wird nacher individuell in den jeweiligen Projekten geschehen.
+		\item Die Konfiguration und Validierung soll möglichst modular und einfach zu erweitern sein. Sowohl im Front- als auch im Backend.
+		\item Für das Frontend soll lediglich die Core-Funktionalität entwickelt und eine API zur Verfügung gestellt werden.
+		\item Das Hochladen der Dateien soll mittels Ajax geschehen.
+		\item Die Ajax-Response soll ein einfaches Uploads-Array zurück senden, das beim Submit des Formulars an den jeweiligen Controler übergeben wird.
+		\item Es soll ein Viewhelper zur Verfügung gestellt werden, der eine Konfiguration lädt und die nötigen HTML-Elemente für das Frontend erzeugt.
+	\end{itemize}
+\item Backend und Konfiguration
+	\begin{itemize}
+		\item Die Konfiguration soll in der ext\_localconf.php der Extension erfolgen.
+		\item Es sollen mehrere Konfigurationen vorgenommen werden können.
+		\item Folgende Optionen sollen standardmäßig zur Verfügung gestellt werden:
+			\begin{itemize}
+				\item Zielverzeichnis
+				\item Maximale Dateigröße (einzeln)
+				\item Maximale Gesamtgröße
+				\item Mindestanzahl an Dateien
+				\item Maximalanzahl an Dateien
+				\item Erlaubte MIME-Types
+				\item Erlaubte Dateiendungen
+				\item TTL
+			\end{itemize}
+		\item Darüber hinaus sollen zur Erweiterung eigene Optionen definiert werden können. 
+	\end{itemize}
+\end{itemize}
