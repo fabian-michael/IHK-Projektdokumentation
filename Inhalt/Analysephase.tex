@@ -112,18 +112,18 @@ Die Anwendung muss folgende Anforderungen erfüllen:
 	\end{itemize}
 \item Allgemein
 	\begin{itemize}
-		\item Die Extension soll ein reines Entwicklerwerkzeug sein. Die Frontend-Umsetzung für den Endnutzer wird nacher individuell in den jeweiligen Projekten geschehen.
 		\item Die Konfiguration und Validierung soll möglichst modular und einfach zu erweitern sein. Sowohl im Front- als auch im Backend.
+		\item Die Extension soll ein reines Entwicklerwerkzeug sein. Die Frontend-Umsetzung für den Endnutzer wird nacher individuell in den jeweiligen Projekten geschehen.
 		\item Für das Frontend soll lediglich die Core-Funktionalität entwickelt und eine API zur Verfügung gestellt werden.
 		\item Das Hochladen der Dateien soll mittels Ajax geschehen.
-		\item Die Ajax-Response soll ein einfaches Uploads-Array zurück senden, das beim Submit des Formulars an den jeweiligen Controler übergeben wird.
-		\item Es soll ein Viewhelper zur Verfügung gestellt werden, der eine Konfiguration lädt und die nötigen HTML-Elemente für das Frontend erzeugt.
+		\item Die Ajax-Response soll ein einfaches Uploads-Array mit den entsprechenden Dateipfaden zurück senden, welches beim Submit des Formulars an den jeweiligen Controler übergeben wird.
+		\item Es soll ein Viewhelper zur Verfügung gestellt werden, der eine Konfiguration lädt und die nötigen HTML-Elemente und Attribute für das Frontend erzeugt.
 	\end{itemize}
 \item Backend und Konfiguration
 	\begin{itemize}
-		\item Die Konfiguration soll in der ext\_localconf.php der Extension erfolgen.
-		\item Es sollen mehrere Konfigurationen vorgenommen werden können.
-		\item Folgende Optionen sollen standardmäßig zur Verfügung gestellt werden:
+		\item Die Konfiguration soll global über eine Configuration Registry geschehen.
+		\item Es sollen mehrere Konfigurationen vorgenommen werden können. Jede Konfiguration soll einen eindeutigen Key erhalten.
+		\item Folgende Einstellungen sollen standardmäßig zur Verfügung gestellt werden:
 			\begin{itemize}
 				\item Zielverzeichnis
 				\item Maximale Dateigröße (einzeln)
@@ -134,6 +134,6 @@ Die Anwendung muss folgende Anforderungen erfüllen:
 				\item Erlaubte Dateiendungen
 				\item TTL
 			\end{itemize}
-		\item Darüber hinaus sollen zur Erweiterung eigene Optionen definiert werden können. 
+		\item Darüber hinaus sollen zur Erweiterung eigene Settings registriert werden können. 
 	\end{itemize}
 \end{itemize}
