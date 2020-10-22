@@ -5,38 +5,53 @@
 \subsection{Zielplattform}
 \label{sec:Zielplattform}
 
-Die Extension soll sowohl unter TYPO3 8.7 als auch unter 9.5 und 10.4 Lauffähig sein. Die PHP Version ist 7.2 oder höher.
+Die Extension soll sowohl unter TYPO3 8.7 als auch unter 9.5 und 10.4 Lauffähig sein. Die PHP Version ist 7.2 oder höher. Das JavaScript muss mit allen gängigen Browsern (auch Internet Explorer 11) kompatibel sein.
 
 
 \subsection{Architekturdesign}
 \label{sec:Architekturdesign}
-\begin{itemize}
-	\item Beschreibung und Begründung der gewählten Anwendungsarchitektur (\zB \acs{MVC}).
-	\item \Ggfs Bewertung und Auswahl von verwendeten Frameworks sowie \ggfs eine kurze Einführung in die Funktionsweise des verwendeten Frameworks.
-\end{itemize}
 
-\paragraph{Beispiel}
-Anhand der Entscheidungsmatrix in Tabelle~\ref{tab:Entscheidungsmatrix} wurde für die Implementierung der Anwendung das \acs{PHP}-Framework Symfony\footnote{\Vgl \citet{Symfony}.} ausgewählt. 
+\subsubsection{Backend}
+\label{sec:Backend}
 
-\tabelle{Entscheidungsmatrix}{tab:Entscheidungsmatrix}{Nutzwert.tex}
+\paragraph{Die Configuration Registry} Die Configuration Registry ist eine Singleton-Klasse, die für die Verwaltung von Konfigurationen zuständig ist. Konfigurationen werden mittels eines eindeutigen Keys registriert und bestehen aus mehreren Unterkonfigurationen, welche ebenfalls einen eindeutigen Key besitzen. In einer Unterkonfiguration können entsprechende Einstellungen gesetzt werden und ein sog. Processor definiert werden bzw. dessen Klassenname. Außerdem kann ein Flag gesetzt werden, falls eine Unterkonfiguration nur für das Backend relevant ist und nicht an das Frontend übergeben werden soll. Damit hat eine Konfiguration letztlich folgende Struktur:
 
+\pagebreak
 
-\subsection{Datenmodell}
-\label{sec:Datenmodell}
-
-\begin{itemize}
-	\item Entwurf/Beschreibung der Datenstrukturen (\zB \acs{ERM} und/oder Tabellenmodell, \acs{XML}-Schemas) mit kurzer Beschreibung der wichtigsten (!) verwendeten Entitäten.
-\end{itemize}
-
-\paragraph{Beispiel}
-In \Abbildung{ER} wird ein \ac{ERM} dargestellt, welches lediglich Entitäten, Relationen und die dazugehörigen Kardinalitäten enthält. 
-
+\Abbildung{beispiel_konfiguration} zeigt die grundsätzliche Struktur einer Konfiguration.
 \begin{figure}[htb]
 \centering
-\includegraphicsKeepAspectRatio{ERDiagramm.pdf}{0.6}
-\caption{Vereinfachtes ER-Modell}
-\label{fig:ER}
-\end{figure} 
+\includegraphicsKeepAspectRatio{beispiel_konfiguration.png}{0.9}
+\caption{Beispiel Konfiguration}
+\label{fig:beispiel_konfiguration}
+\end{figure}
+
+\paragraph{Die Processors} Die Verarbeitung der Dateien geschieht in den zuvor genannten Processors. Diese bestehen aus drei Hooks: onPreload, onUpload und onValidate.
+
+\begin{itemize}
+	\item onPreload 	– Mit diesem hook können Dateien für das Preloading vorbereitet werden. Z.B. Thumbnail erzeugen etc.
+	\item onUpload 		– Hier werden die Dateien verarbeitet, die vom User hochgeladen werden. Z.B. Validierung der Dateigröße, Thumbnail erzeugen etc.
+	\item onValidate	- Dieser Hook dient zur abschließenden Validierung. Z.B. wenn ein Formular submitted wird.
+\end{itemize}
+
+\paragraph{Der Ajax Handler} Im Backend wurde als Einstiegspunkt ein Ajax-Handler mit einer Handler-Funktion implementiert. Dafür wurde im TypoScript ein Seitentyp definiert, mittels dem diese Handler-Funktion als userFunc aufgerufen wird, sobald an diesen Seitentyp ein HTTP-Request ankommt. Der Ajax-Handler lädt dann die entsprechende Konfiguration aus der Registry und führt eine entsprechende Fuktion eines Services aus. Dafür muss ihm mitgeteilt werden welche Aktion er ausführen soll. Es gibt die Aktionen Upload und Remove.
+
+\paragraph{Der Service} Der Service bildet die Zentrale anlaufstelle und stellt mehrere Funktionen zur verfügung. Er ist für die Verarbeitung und die Integritätssicherung der Daten zuständig. Er führt die entsprechenden Hooks der Processors aus und liefert daraufhin ein Ergebnis. Zur Integritätssicherung berechnet der Service eine Prüfsumme und stellt eine Funktion zur Validierung bereit.
+
+
+\subsubsection{Frontend}
+\label{sec:Frontend}
+
+\paragraph{Module Bundler} Für das Frontend stellte sich zunächst die Frage, mit welchem Build-Tool bzw. Bundler das JavaScript transpiled und gebundled werden soll. Zu den drei relevantesten bundlern zählen Webpack, Parcel und Rollup.
+% TODO
+
+\tabelle{Entscheidungsmatrix Module Bundler}{tab:Entscheidungsmatrix}{Nutzwert.tex}
+
+\paragraph{Typescript} Der Source Code wurde vollständig in TypeScript geschrieben. Dadurch ist Typensicherheit gewährleistet und es werden schon im Vorfeld viele Fehlerquellen eliminiert. Außerdem ermöglicht TypeScript, sinnvolle und automatische Code-Vorschläge in der IDE. 
+Mittels eines Plugins für Rollup wird das TypeScript dann in JavaScript transpiled. TypeScript wurde für das Projekt so konfiguriert, dass ECMAScript 5 konforme JavaScript-Syntax erzeugt wird (Ohne Polyfills). Obwohl dies eigentlich Aufgabe von Babel wäre, ergibt sich dadurch aber am Ende ein kleineres Bundle.
+
+\paragraph{Babel} Babel ist ein Transpiler der JavaScript Code und Syntaxt transformieren kann. Dafür gibt es allerhand Plugins, die diese Transformationen vornehmen. Darüber hinaus gibt es Presets, also Zusammenschlüsse aus Plugins und Einstellungen. Eines davon ist das Preset \textbf{@babel/preset-env}. Dieses smarte Preset transformiert den Source Code anhand von einer sog. Browserslist Konfiguration. In dieser wird festgelegt, mit welchen Browsern der Code kompatibel sein muss. Neben reiner Syntax erkennt das Preset außerdem, wenn Featuers verwendet wurden, die nicht von allen Browsern aus der Browserslist Konfiguration unterstützt werden und importiert automatisch die entsprechenden sog. Polyfills - also Third-Party Implementierungen - aus dem Open Source Projekt \textbf{core-js}, die anstelle treten, wenn ein Browser diese Features nicht nativ unterstützt. Die Browserslist für dieses Projekt wurde auf default festgelegt, also alle relevanten Browser am Markt. Das schließt aktuell Browser wie den Internet Explorer 11 noch mit ein, was Teil der Anforderungen ist.
+
 
 
 \subsection{Geschäftslogik}
