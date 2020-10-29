@@ -1,11 +1,11 @@
 % !TEX root = ../Projektdokumentation.tex
 \section{Einleitung}
 \label{sec:Einleitung}
-
+Diese Projektdokumentation schildert den Ablauf meines Abschlussprojektes, das ich im Rahmen meiner Ausbildung zum Fachinformatiker für Anwendungsentwicklung durchgeführt habe. Mein Ausbildungsbetrieb ist die form4 GmbH \& Co. KG aus Berlin.
 
 \subsection{Projektumfeld} 
 \label{sec:Projektumfeld}
-1996 als Internetagentur gegründet hat die form4 GmbH \& Co. KG sich zu einem Softwareunternehmen entwickelt. Die Schwerpunkte liegen auf der Herstellung von Websites und Portalen sowie der Realisierung individueller, webbasierter Softwarelösungen für mittelständische Unternehmen und Organisationen. Das Unternehmen setzt sich aus zwei Abteilungen - hier als Units bezeichnet - zusammen. Der Web-Unit und der Enterprise-Unit. Der Auftraggeber dieses Projekts ist der Fachbereich TYPO3 aus der Web-Unit.
+1996 als Internetagentur gegründet hat die form4 GmbH \& Co. KG sich zu einem Softwareunternehmen entwickelt. Die Schwerpunkte liegen auf der Herstellung von Websites und Portalen sowie der Realisierung individueller, webbasierter Softwarelösungen für mittelständische Unternehmen und Organisationen. Das Unternehmen setzt sich aus zwei Abteilungen - im Folgenden als Units bezeichnet - zusammen. Die Web-Unit und die Enterprise-Unit. Der Auftraggeber dieses Projekts ist der Fachbereich TYPO3 bestehend aus den Seniorentwicklern der Web-Unit.
 
 \paragraph{Die Web-Unit}
 Schwerpunkt der Webunit ist die technische Umsetzung von Websites und Portalen im öffentlich zugänglichen Bereich. Hierunter fallen auch Community- und eCommerce-Lösungen.
@@ -20,21 +20,19 @@ Die Enterprise-Unit beschäftigt sich in erster Linie mit javabasierten Software
 
 \subsection{Projektziel} 
 \label{sec:Projektziel}
-Ziel des Projektes ist die Entwicklung einer TYPO3-Extension bestehend aus Backend und Frontend. Diese Extension soll produktiv in Kundenprojekten zum Einsatz kommen und bestehende Implementierungen ablösen. Dadurch sollen Entwickler zukünftig entlastet werden und eine einfache und einheitliche Lösung zur Verwaltung von Datei-Uploads geschaffen werden. 
+Ziel des Projektes ist die Entwicklung einer TYPO3-Extension (Backend) und dem dazugehörigen Frontend. Diese Extension soll produktiv in Kundenprojekten zum Einsatz kommen und bestehende Implementierungen ablösen. Dadurch sollen Entwickler zukünftig entlastet werden und eine einfache und einheitliche Lösung zur Verwaltung von Datei-Uploads geschaffen werden. 
 
-Des Weiteren soll die Extension in das öffentliche TYPO3 Extension Repository (im Folgenden mit TER abgekürzt) deployed und der Source-Code als OpenSource Repository auf GitHub veröffentlicht werden. 
+Des Weiteren soll die Extension in das öffentliche TYPO3 Extension Repository (TER) deployed und der Source-Code auf GitHub mit einer Open Source Lizenz veröffentlicht werden. 
 
 
 \subsection{Projektbegründung} 
 \label{sec:Projektbegruendung}
-\begin{itemize}
-	\item Warum ist das Projekt sinnvoll (\zB Kosten- oder Zeitersparnis, weniger Fehler)?
-	\item Was ist die Motivation hinter dem Projekt?
-\end{itemize}
+Die Motivation dieses Projektes ist es, ein einheitliches, einfach zu integrierendes, konfigurierendes und erweiterndes Tool zum Verwalten von asynchronen Dateiuploads zu schaffen. Durch die zentrale und modular gestaltete Konfigurationsschnittstelle soll der Aufwand und die Fehleranfälligkeit bei der Implementierung eines Dateiuploads deutlich reduziert werden.
 
 
 \subsection{Projektschnittstellen} 
 \label{sec:Projektschnittstellen}
+% TODO
 \begin{itemize}
 	\item Mit welchen anderen Systemen interagiert die Anwendung (technische Schnittstellen)?
 	\item Wer genehmigt das Projekt \bzw stellt Mittel zur Verfügung? 
@@ -45,6 +43,4 @@ Des Weiteren soll die Extension in das öffentliche TYPO3 Extension Repository (
 
 \subsection{Projektabgrenzung} 
 \label{sec:Projektabgrenzung}
-\begin{itemize}
-	\item Was ist explizit nicht Teil des Projekts (\insb bei Teilprojekten)?
-\end{itemize}
+Nicht teil dieses Projektes ist die Umsetzung einer GUI bestehend aus HTML, CSS und JavaScript, welches Änderungen am DOM vornimmt. Es werden lediglich die benötigten HTML Formular-Felder erzeugt, mit denen der Benutzer Dateien auswählen kann und die Daten beim Absenden des Formulars an das Backend gesendet werden. Das JavaScript beschränkt sich nur auf die Verarbeitung und Validierung der Daten und stellt eine API bereit, mit deren Hilfe dann jeweils eine ansprechende und Projektspezifische GUI umgesetzt werden kann.
