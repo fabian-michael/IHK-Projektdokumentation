@@ -16,8 +16,6 @@ Die Extension soll sowohl unter TYPO3 8.7 als auch unter 9.5 und 10.4 Lauffähig
 
 \paragraph{Die Configuration Registry} Die Verwaltung von Konfiguration soll zentral geschehen. Dafür solleine Configuration Registry als Singleton implementiert werden. Konfigurationen sollen mittels eines eindeutigen Keys registriert werden und aus  aus mehreren Unterkonfigurationen bestehen, welche ebenfalls einen eindeutigen Key besitzen. In einer Unterkonfiguration sollen entsprechende Einstellungen vorgenommen werden und ein sog. Processor definiert werden. Soll eine Unterkonfiguration nur für das Backend relevant sein, wie z.B. ein Processor, der für das Verschieben der Dateien auf dem Server verantwortlich ist, muss dafür ein entsprechendes Flag gesetzt werden können. 
 
-\pagebreak
-
 \Abbildung{beispiel_konfiguration} zeigt die grundsätzliche Struktur einer Konfiguration.
 \begin{figure}[htb]
 \centering
