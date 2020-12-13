@@ -6,17 +6,15 @@
 \subsection{Ist-Analyse} 
 \label{sec:IstAnalyse}
 
-Im Rahmen mehrerer Kundenprojekte wurden bereits verschiedene Tools, sowohl Open Source als auch kommerziell, für das Hochladen von Dateien evaluiert und eingesetzt. Sowohl Backend- als auch Frontendseitig hat sich bisher allerdings keine zufriedenstellende Lösung ergeben. Gründe gehen von fehlenden Features bis unzureichenden Dokumentationen, unregelmäßige Wartungen und schlechte Anpassbarkeit im Backend und Frontend. 
+Im Rahmen mehrerer Kundenprojekte wurden bereits verschiedene Tools, sowohl Open Source als auch kommerziell, für das Hochladen von Dateien evaluiert und eingesetzt. Sowohl Backend- als auch Frontendseitig hat sich bisher allerdings keine zufriedenstellende Lösung ergeben. Gründe gehen von fehlenden Features bis unzureichenden Dokumentationen, unregelmäßige Wartungen und schlechte Anpassbarkeit. 
 
-Backendseitig ist meist auch die Integration in das TYPO3 Ökosystem sehr aufwändig oder muss jedes Mal neu entwickelt werden, was zusätzliche Arbeit und kosten bedeutet. Dazu kommen Security Issues und mangelnde Umsetzung der PSR-Standards.  
+Backendseitig ist die Integration in das TYPO3 Ökosystem aufwändig oder es muss für jedes Projekt neu implementiert werden, was zusätzliche Arbeit und kosten bedeutet. Hinzu kommen Security Issues und mangelnde Umsetzung der PSR-Standards.  
 
-Frontendseitig haben sich die bisher getesteten Tools als sehr konfigurationslastig und schlecht anpassbar herausgestellt. Zudem erfolgt die Konfiguration von Backend und Frontend getrennt, was Redundanzen verursacht und zu Inkonsistenzen führen kann. 
+Frontendseitig haben sich die bisher getesteten Tools als sehr konfigurationslastig und schlecht anpassbar herausgestellt. Zudem erfolgt die Konfiguration von Backend und Frontend getrennt, was zu Inkonsistenzen führen kann. 
 
 
 \subsection{Wirtschaftlichkeitsanalyse}
 \label{sec:Wirtschaftlichkeitsanalyse}
-% todo
-
 
 \subsubsection{\gqq{Make or Buy}-Entscheidung}
 \label{sec:MakeOrBuyEntscheidung}
@@ -24,109 +22,53 @@ Da bisher keine zufriedenstellende Lösung gefunden wurde, weder Open Source, no
 
 \subsubsection{Projektkosten}
 \label{sec:Projektkosten}
-\begin{itemize}
-	\item Welche Kosten fallen bei der Umsetzung des Projekts im Detail an (\zB Entwicklung, Einführung/Schulung, Wartung)?
-\end{itemize}
-
-\paragraph{Beispielrechnung (verkürzt)}
 Die Kosten für die Durchführung des Projekts setzen sich sowohl aus Personal-, als auch aus Ressourcenkosten zusammen.
-Laut Tarifvertrag verdient ein Auszubildender im dritten Lehrjahr pro Monat \eur{1000} Brutto. 
 
-\begin{eqnarray}
-8 \mbox{ h/Tag} \cdot 220 \mbox{ Tage/Jahr} = 1760 \mbox{ h/Jahr}\\
-\eur{1000}\mbox{/Monat} \cdot 13,3 \mbox{ Monate/Jahr} = \eur{13300} \mbox{/Jahr}\\
-\frac{\eur{13300} \mbox{/Jahr}}{1760 \mbox{ h/Jahr}} \approx \eur{7,56}\mbox{/h}
-\end{eqnarray}
-
-Es ergibt sich also ein Stundenlohn von \eur{7,56}. 
-Die Durchführungszeit des Projekts beträgt 70 Stunden. Für die Nutzung von Ressourcen\footnote{Räumlichkeiten, Arbeitsplatzrechner etc.} wird 
-ein pauschaler Stundensatz von \eur{15} angenommen. Für die anderen Mitarbeiter wird pauschal ein Stundenlohn von \eur{25} angenommen. 
-Eine Aufstellung der Kosten befindet sich in Tabelle~\ref{tab:Kostenaufstellung} und sie betragen insgesamt \eur{2739,20}.
+Die Durchführungszeit des Projekts beträgt 70 Stunden und der Stundenlohn für einen Auszubildenden beträgt etwa \eur{7,56}. Für andere Mitarbeiter wird pauschal ein Stundenlohn von \eur{25} und für die Nutzung von Ressourcen\footnote{Räumlichkeiten, Arbeitsplatzrechner etc.}
+ein Stundensatz von \eur{15} angenommen. 
+Die Aufstellung der Kosten befindet sich in Tabelle~\ref{tab:Kostenaufstellung} und sie betragen insgesamt \eur{2219,20}.
 \tabelle{Kostenaufstellung}{tab:Kostenaufstellung}{Kostenaufstellung.tex}
 
 
 \subsubsection{Amortisationsdauer}
 \label{sec:Amortisationsdauer}
-\begin{itemize}
-	\item Welche monetären Vorteile bietet das Projekt (\zB Einsparung von Lizenzkosten, Arbeitszeitersparnis, bessere Usability, Korrektheit)?
-	\item Wann hat sich das Projekt amortisiert?
-\end{itemize}
 
-\paragraph{Beispielrechnung (verkürzt)}
-Bei einer Zeiteinsparung von 10 Minuten am Tag für jeden der 25 Anwender und 220 Arbeitstagen im Jahr ergibt sich eine gesamte Zeiteinsparung von 
+Bei einer Zeiteinsparung von schätzungsweise 10 Stunden pro Dateiupload und 6 Dateiuploads im Jahr ergibt sich eine gesamte Zeiteinsparung von 
 \begin{eqnarray}
-25 \cdot 220 \mbox{ Tage/Jahr} \cdot 10 \mbox{ min/Tag} = 55000 \mbox{ min/Jahr} \approx 917 \mbox{ h/Jahr} 
+\mbox{ 6/Jahr} \cdot 10 \mbox{ h} = 60 \mbox{ h/Jahr} 
 \end{eqnarray}
 
 Dadurch ergibt sich eine jährliche Einsparung von 
 \begin{eqnarray}
-917 \mbox{h} \cdot \eur{(25 + 15)}{\mbox{/h}} = \eur{36680}
+60 \mbox{h/Jahr} \cdot \eur{(25 + 15)}{\mbox{/h}} = \eur{2400}\mbox{/Jahr}
 \end{eqnarray}
 
-Die Amortisationszeit beträgt also $\frac{\eur{2739,20}}{\eur{36680}\mbox{/Jahr}} \approx 0,07 \mbox{ Jahre} \approx 4 \mbox{ Wochen}$.
+Die Amortisationszeit beträgt also $\frac{\eur{2219,20}}{\eur{2400}\mbox{/Jahr}} \approx 0,92 \mbox{ Jahre} \approx 11 \mbox{ Monate}$.
 
 
-\subsection{Nutzwertanalyse}
-\label{sec:Nutzwertanalyse}
-\begin{itemize}
-	\item Darstellung des nicht-monetären Nutzens (\zB Vorher-/Nachher-Vergleich anhand eines Wirtschaftlichkeitskoeffizienten). 
-\end{itemize}
-
-\paragraph{Beispiel}
-Ein Beispiel für eine Entscheidungsmatrix findet sich in Kapitel~\ref{sec:Architekturdesign}: \nameref{sec:Architekturdesign}.
+\subsection{Nicht-Monetäre Vorteile}
+Die Nicht-Monetären Vorteile sind wie bereits aufgeführt die einfache Handhabung des Tools für Entwickler und das Schaffen eines firmenweiten Standards, was die Wartung und Einführung deutlich vereinfacht.
 
 
 \subsection{Anwendungsfälle}
 \label{sec:Anwendungsfaelle}
-\begin{itemize}
-	\item Welche Anwendungsfälle soll das Projekt abdecken?
-	\item Einer oder mehrere interessante (!) Anwendungsfälle könnten exemplarisch durch ein Aktivitätsdiagramm oder eine \ac{EPK} detailliert beschrieben werden. 
-\end{itemize}
 
-\paragraph{Beispiel}
-Ein Beispiel für ein Use Case-Diagramm findet sich im \Anhang{app:UseCase}.
+Zur Veranschaulichung der Anwendungsfälle wurde ein Anwendungsfalldiagramm erstellt, das im \Anhang{app:UseCase} eingesehen werden kann. Dabei werden Anwendungsfälle aus Sicht eines Endnutzers und aus Sicht eines Entwicklers dargestellt. Der Anwendungsfall des Hochladens wurde außerdem exemplarisch in einer EPK modelliert. Diese ist im \Anhang{app:EPK} zu finden. Sie ist in drei Spalten gegliedert. Die erste Spalte beschreibt die Prozesse und Ereignisse vor, die mittlere Spalte während und die dritte Spalte nach dem Hochladen.
 
 
 \subsection{Qualitätsanforderungen}
 \label{sec:Qualitaetsanforderungen}
+
+Da das Tool in erster Linie ein Entwicklerwerkzeug ist, sind die wichtigsten Qualitätsanforderungen an das Projekt:
 \begin{itemize}
-	\item Welche Qualitätsanforderungen werden an die Anwendung gestellt (\zB hinsichtlich Performance, Usability, Effizienz \etc (siehe \citet{ISO9126}))?
+	\item Zuverlässigkeit – Entwickler sollten sich auf die Core-Funktionalität und die API des Fileuploaders verlassen können.
+	\item Benutzbarkeit – Es sollte eine steile Lernkurve und simple API besitzen.
+	\item Übertragbarkeit – Es sollte sich problemlos in Projekte integrieren lassen.
+	\item Änderbarkeit – Durch Modularität soll gewährleistet sein, dass Entwickler einfach projektspezifische Erweiterungen vornehmen können.
 \end{itemize}
 
 
 \subsection{Lastenheft/Fachkonzept}
 \label{sec:Lastenheft}
 
-Die Anwendung muss folgende Anforderungen erfüllen: 
-\begin{itemize}[itemsep=0em,partopsep=0em,parsep=0em,topsep=0em]
-\item Kompabilität
-	\begin{itemize}
-		\item Die Extension muss sowohl mit TYPO3 8.7 als auch mit TYPO3 9.5 oder höher kompatibel sein.
-		\item Es dürfen keine TYPO3 Features/APIs verwendet werden, welche ab TYPO3 9.5 deprecated sind.
-	\end{itemize}
-\item Allgemein
-	\begin{itemize}
-		\item Die Konfiguration und Validierung soll möglichst modular und einfach zu erweitern sein. Sowohl im Front- als auch im Backend.
-		\item Die Extension soll ein reines Entwicklerwerkzeug sein. Die Frontend-Umsetzung für den Endnutzer wird nacher individuell in den jeweiligen Projekten geschehen.
-		\item Für das Frontend soll lediglich die Core-Funktionalität entwickelt und eine API zur Verfügung gestellt werden.
-		\item Das Hochladen der Dateien soll mittels Ajax geschehen.
-		\item Die Ajax-Response soll ein einfaches Uploads-Array mit den entsprechenden Dateipfaden zurück senden, welches beim Submit des Formulars an den jeweiligen Controler übergeben wird.
-		\item Es soll ein Viewhelper zur Verfügung gestellt werden, der eine Konfiguration lädt und die nötigen HTML-Elemente und Attribute für das Frontend erzeugt.
-	\end{itemize}
-\item Backend und Konfiguration
-	\begin{itemize}
-		\item Die Konfiguration soll global über eine Configuration Registry geschehen.
-		\item Es sollen mehrere Konfigurationen vorgenommen werden können. Jede Konfiguration soll einen eindeutigen Key erhalten.
-		\item Folgende Einstellungen sollen standardmäßig zur Verfügung gestellt werden:
-			\begin{itemize}
-				\item Zielverzeichnis
-				\item Maximale Dateigröße (einzeln)
-				\item Maximale Gesamtgröße
-				\item Mindestanzahl an Dateien
-				\item Maximalanzahl an Dateien
-				\item Erlaubte MIME-Types
-				\item Erlaubte Dateiendungen
-			\end{itemize}
-		\item Darüber hinaus sollen zur Erweiterung eigene Settings registriert werden können. 
-	\end{itemize}
-\end{itemize}
+Nach der Analysephase und dem Fachgespräch mit dem Fachbereich wurde ein Lastenheft erstellt, das alle Anforderungen an das Tool umfasst. Im \Anhang{app:Lastenheft} kann ein Auszug aus diesem eingesehen werden.
