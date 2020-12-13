@@ -1,7 +1,7 @@
 % !TEX root = ../Projektdokumentation.tex
 \section{Einleitung}
 \label{sec:Einleitung}
-Diese Projektdokumentation schildert den Ablauf meines Abschlussprojektes, das ich im Rahmen meiner Ausbildung zum Fachinformatiker für Anwendungsentwicklung durchgeführt habe. Mein Ausbildungsbetrieb ist die form4 GmbH \& Co. KG aus Berlin.
+Diese Projektdokumentation schildert den Ablauf des Abschlussprojektes, das im Rahmen der Ausbildung zum Fachinformatiker für Anwendungsentwicklung durchgeführt wurde. Der Ausbildungsbetrieb des Autors ist die form4 GmbH \& Co. KG aus Berlin.
 
 \subsection{Projektumfeld} 
 \label{sec:Projektumfeld}
@@ -16,25 +16,23 @@ Die meisten von der Webunit realisierten Projekte basieren auf leistungsfähigen
 
 \paragraph{Die Enterprise-Unit}
 Die Enterprise-Unit beschäftigt sich in erster Linie mit javabasierten Softwaresystemen. Das beinhaltet Intranet- und Unternehmensportale wie auch klassische individuelle datenverwaltende Software und Workflowsysteme.
-
+cfd
 
 \subsection{Projektziel} 
 \label{sec:Projektziel}
-Ziel des Projektes ist die Entwicklung einer TYPO3-Extension (Backend) und dem dazugehörigen Frontend. Diese Extension soll produktiv in Kundenprojekten zum Einsatz kommen und bestehende Implementierungen ablösen. Dadurch sollen Entwickler zukünftig entlastet werden und eine einfache und einheitliche Lösung zur Verwaltung von Datei-Uploads geschaffen werden. 
-
-Des Weiteren soll die Extension in das öffentliche TYPO3 Extension Repository (TER) deployed und der Source-Code auf GitHub mit einer Open Source Lizenz veröffentlicht werden. 
+Ziel des Projektes ist die Entwicklung einer TYPO3-Extension und dem dazugehörigen Frontend. Diese Extension soll in Kundenprojekten zum Produktiveinsatz kommen und bestehende Implementierungen ablösen. Dadurch sollen Entwickler zukünftig entlastet werden und eine einfache und einheitliche Lösung zur Verwaltung von asynchronen Datei-Uploads geschaffen werden. 
 
 
 \subsection{Projektbegründung} 
 \label{sec:Projektbegruendung}
-Die Motivation dieses Projektes ist es, ein einheitliches, einfach zu integrierendes, konfigurierendes und erweiterndes Tool zum Verwalten von asynchronen Dateiuploads zu schaffen. Durch die zentrale und modular gestaltete Konfigurationsschnittstelle soll der Aufwand und die Fehleranfälligkeit bei der Implementierung eines Dateiuploads deutlich reduziert werden.
+Die Motivation dieses Projektes ist es, durch ein einheitliches, einfach zu integrierendes, konfigurierendes und erweiterndes Tool einen firmenweiten Standard zu schaffen und alte Implementierungen zu abzulösen. Durch die zentrale und modular gestaltete Konfigurationsschnittstelle soll der Aufwand und die Fehleranfälligkeit bei der Implementierung eines Dateiuploads deutlich reduziert werden, sodass sich die Entwickler auf das wesentliche konzentrieren können.
 
 
 \subsection{Projektschnittstellen} 
 \label{sec:Projektschnittstellen}
-Da es sich um eine TYPO3 Extension handelt, verwendet das Projekt dementsprechend intern die APIs die von TYPO3 zur Verfügung gestellt werden. TYPO3 ist ein Open Source Enterprise Content Management System (CMS) für die Umsetzung von kleinen bis hin zu sehr großen multinationalen Websites. Nach außen stellt das Projekt sowohl im Backend als auch im Frontend für die Entwickler eine API bereit, mit der es in ein Kundenprojekt integriert werden kann. Unter anderen die Konfigurationsschnittstelle, mit der zentral die Konfigurationen verwaltet werden.
+Da es sich um eine TYPO3 Extension handelt, verwendet das Projekt dementsprechend intern die APIs die von TYPO3 zur Verfügung gestellt werden. TYPO3 ist ein Open Source Enterprise Content Management System (CMS) für die Umsetzung von kleinen bis hin zu sehr großen multinationalen Websites. Nach außen stellt das Projekt sowohl im Backend als auch im Frontend für die Entwickler eine API bereit, mit der es in ein Kundenprojekt integriert werden kann. Unter anderen die Konfigurationsschnittstelle, mit der zentral die Konfigurationen verwaltet werden. TODO weitere Schnittstellen.
 
 
 \subsection{Projektabgrenzung} 
 \label{sec:Projektabgrenzung}
-Nicht teil dieses Projektes ist die Umsetzung einer GUI bestehend aus HTML, CSS und JavaScript, welches Änderungen am DOM vornimmt. Es werden lediglich die benötigten HTML Formular-Felder erzeugt, mit denen der Benutzer Dateien auswählen kann und die Daten beim Absenden des Formulars an das Backend gesendet werden. Das JavaScript beschränkt sich nur auf die Verarbeitung und Validierung der Daten und stellt eine API bereit, mit deren Hilfe dann jeweils eine ansprechende und Projektspezifische GUI umgesetzt werden kann.
+Nicht teil dieses Projektes ist die Umsetzung einer GUI. Es sollen lediglich die notwendigen Kernelemente im HTML erzeugt werden. Dies sind die Formular-Felder, mit denen der Benutzer Dateien auswählen kann und die Daten beim Absenden des Formulars an das Backend gesendet werden. Das JavaScript beschränkt sich nur auf die Verarbeitung und Validierung der Daten, dem State Management und stellt eine API bereit, mit deren Hilfe dann jeweils eine ansprechende und Projektspezifische GUI umgesetzt werden kann.
