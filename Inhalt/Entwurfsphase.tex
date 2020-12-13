@@ -5,7 +5,7 @@
 \subsection{Zielplattform}
 \label{sec:Zielplattform}
 
-Die Extension soll sowohl unter TYPO3 8.7 als auch unter 9.5 und 10.4 Lauffähig sein. Die PHP Version ist 7.2 oder höher. Das JavaScript muss mit allen gängigen Browsern (auch Internet Explorer 11) kompatibel sein.
+Die Extension soll sowohl unter TYPO3 8.7 als auch unter 9.5 und 10.4 lauffähig sein. Die PHP Version soll 7.2 oder höher sein. Das JavaScript muss mit allen gängigen Browsern (auch Internet Explorer 11) kompatibel sein.
 
 
 \subsection{Architekturdesign}
@@ -14,9 +14,9 @@ Die Extension soll sowohl unter TYPO3 8.7 als auch unter 9.5 und 10.4 Lauffähig
 \subsubsection{Backend}
 \label{sec:Backend}
 
-\paragraph{Die Configuration Registry} Die Verwaltung von Konfiguration soll zentral geschehen. Dafür solleine Configuration Registry als Singleton implementiert werden. Konfigurationen sollen mittels eines eindeutigen Keys registriert werden und aus  aus mehreren Unterkonfigurationen bestehen, welche ebenfalls einen eindeutigen Key besitzen. In einer Unterkonfiguration sollen entsprechende Einstellungen vorgenommen werden und ein sog. Processor definiert werden. Soll eine Unterkonfiguration nur für das Backend relevant sein, wie z.B. ein Processor, der für das Verschieben der Dateien auf dem Server verantwortlich ist, muss dafür ein entsprechendes Flag gesetzt werden können. 
+\paragraph{Die Configuration Registry} Die Verwaltung von Konfiguration soll zentral geschehen. Dafür solleine Configuration Registry als Singleton implementiert werden. Konfigurationen sollen mittels eines eindeutigen Keys registriert werden. In einer Konfiguration sollen dann sogenannte Processors definiert und Settings für diese festgelegt werden können. Außerdem soll es möglich sein bestimme Settings für das Frontend auszuschließen. Dafür soll ein entsprechendes Flag gesetzt werden können. 
 
-\Abbildung{beispiel_konfiguration} zeigt die grundsätzliche Struktur einer Konfiguration.
+\Abbildung{beispiel_konfiguration} zeigt beispielhaft die Struktur einer Konfiguration.
 \begin{figure}[htb]
 \centering
 \includegraphicsKeepAspectRatio{beispiel_konfiguration.png}{0.9}
@@ -24,7 +24,7 @@ Die Extension soll sowohl unter TYPO3 8.7 als auch unter 9.5 und 10.4 Lauffähig
 \label{fig:beispiel_konfiguration}
 \end{figure}
 
-\paragraph{Die Processors} Die Verarbeitung und Validierung der Dateien soll in den zuvor genannten Processors geschehen. Diese sollen folgende Schnittstellen zur Verfügung stellen:
+\paragraph{Die Processors} Die Verarbeitung und Validierung der Dateien soll in den zuvor genannten Processors geschehen. Dafür soll ein Interface zur Verfügung gestellt werden, das die folgenden Methoden enthalten soll:
 
 \begin{itemize}
 	\item onPreload 	– Mit diesem Hook können Dateien für das Preloading vorbereitet werden. Z.B. Thumbnail erzeugen etc.
@@ -32,61 +32,55 @@ Die Extension soll sowohl unter TYPO3 8.7 als auch unter 9.5 und 10.4 Lauffähig
 	\item onValidate	- Dieser Hook dient zur abschließenden Validierung. Z.B. wenn ein Formular submitted wird.
 \end{itemize}
 
-Ziel dieser herangehensweise ist es, dass das Validieren und Verarbeiten der Dateien möglichst modular ist.
+Ziel dieser herangehensweise ist es, die Anforderung zu erfpllen, dass das Validieren und Verarbeiten der Dateien möglichst modular und erweiterbar ist.
 
-\paragraph{Der Service} Als zentrale Anlaufstelle soll ein Service dienen der für die Verarbeitung und die Integritätssicherung der Daten zuständig ist. Er soll die entsprechenden Hooks der Processors ausführen. Zur Integritätssicherung soll er eine Prüfsumme berechnen und diese an das Frontend senden.
+\paragraph{Der Ajax-Handler} Als Einstiegspunkt für die HTTP-Requests soll eine Ajax-Handler-Klasse dienen. Dafür muss im TypoScript (nicht zu verwechseln mit TypeScript) eine entsprechende Konfiguration angelegt werden. TypoScript ist eine TYPO3 eigene Konfigurationssprache, mit der das Rendering bzw. die Ausgabe gesteuert wird.
+
+\paragraph{Der Service} Das Zentrum soll eine Service-Klasse bilden, die für die Verarbeitung und die Integritätssicherung der Daten zuständig ist und afür die entsprechenden Aufgaben delegiert, die dafür notwendig sind. Beispielsweise die entsprechenden Hooks der Processors ausführen etc. Zur Integritätssicherung soll bei erfolgreicher Validierung mindestens einer Datei eine Prüfsumme berechnet und diese an das Frontend zurück gesendet werden.
 
 \subsubsection{Frontend}
 \label{sec:Frontend}
 
-\paragraph{Module Bundler} Für das Frontend stellte sich zunächst die Frage, mit welchem Build-Tool bzw. Bundler das JavaScript transpiled und gebundled werden soll. Ein Module-Bundler löst Modul-Abhängigkeiten auf und vereint alles in einem einzigen sog. Bundle. Er führt außerdem Optimierungen, wie z.B. das sog. Tree-Shaking oder auch Dead Code Elimination gennant, durch. Zu den drei relevantesten bundlern zählen Webpack, Parcel und Rollup. Alle drei sind hervorragende Tools, die ihre Stärken und Schwächen haben. Nach der Nutzwertanalyse fiel die Entscheidung für das Projekt auf Rollup. Mit Rollup wurde das beste Ergebnis erzielt. Es ist hervorragend für diesen Zweck geeignet. Die Bundle-Größe ist zwar im Gegensatz zu Parcel etwas größer, allerdings ist dies vertretbar und die Vorteile überwiegen. Mit Rollup können sehr einfach unterschiedliche Bundles erzeugt werden, wie ein statisches Bundle, das in einer Website als statische Datei eingebunden werden kann und ein Bundle, das als Modul in ein anderes importiert werden kann. Auch in den anderen Punkten konnte Rollup überzeugen. Es ist sehr gut dokumentiert, es ist einfach konfigurierbar und sehr wichtig ist außerdem, dass, wenn das Bundle als statische Datei in ein Projekt eingebunden wird, die IDE den Code so gut es geht nachvollziehen und vervollständigen kann. Das ist mit Rollup ohne Probleme möglich. Mit Webpack war dies nicht gut möglich und mit Parcel war dies fast gar nicht möglich. 
+\paragraph{HTML} Im HTML sollen zwei Elemente erzeugt werden. Zum einen ein File-Input-Element, das dem Benutzer ermöglicht Dateien auszuwählen und zum anderen ein Hidden-Input-Element, das später die relevanten Daten speichert, die beim Formular-Submit an den jeweiligen Controller gesendet werden. 
+
+\paragraph{Module-Bundler} Für das Frontend stellte sich zunächst die Frage, mit welchem Build-Tool bzw. Module-Bundler das JavaScript transpiled und gebündelt werden soll. Ein Module-Bundler löst Modul-Ab\-häng\-ig\-kei\-ten auf und vereint alles in einem einzigen sogenannten Bundle. Er führt außerdem Optimierungen durch, wie z.B. das sogenannte Tree-Shaking oder auch Dead Code Elimination genannt. Zu den drei relevantesten bundlern zählen Webpack, Parcel und Rollup. Alle drei sind hervorragende Tools, die ihre Stärken und Schwächen haben. Nach der Nutzwertanalyse fiel die Entscheidung für das Projekt auf Rollup. Mit Rollup wurde das beste Ergebnis erzielt. Es ist sehr gut für diesen Zweck geeignet. Die Bundle-Größe ist zwar im Gegensatz zu Parcel etwas größer, allerdings ist dies vertretbar und die Vorteile überwiegen. Mit Rollup können sehr einfach unterschiedliche Bundles erzeugt werden, wie ein statisches Bundle, das in einer Website als statische Datei eingebunden werden kann und ein Bundle, das als Modul in ein anderes importiert werden kann. Auch in den anderen Punkten konnte Rollup überzeugen. Es ist sehr gut dokumentiert, es ist einfach konfigurierbar und sehr wichtig ist außerdem, dass, wenn das Bundle als statische Datei in ein Projekt eingebunden wird, die IDE den Code so gut es geht nachvollziehen und vervollständigen kann. Das ist mit Rollup ohne Probleme möglich. Mit Webpack war dies nicht gut möglich und mit Parcel gar nicht möglich. 
 
 \tabelle{Entscheidungsmatrix Module Bundler}{tab:Entscheidungsmatrix}{Nutzwert.tex}
 
-\paragraph{Typescript} Der Source Code soll vollständig in TypeScript geschrieben werden. TypeScript ist eine Programmiersprache entwickelt von Microsoft und bilet eine Übermenge zu JavaScript. Es fügt statische Typen zu JavaScript hinzu. Dadurch ist Typensicherheit gewährleistet und werden schon im Vorfeld viele potenzielle Fehlerquellen eliminiert, da die IDE und der TypeScript-(Trans)compiler darauf hinweisen. Außerdem ermöglicht TypeScript, sinnvolle und automatische Code-Vorschläge in der IDE. 
+\paragraph{TypeScript} Der Source Code soll vollständig in TypeScript geschrieben werden. TypeScript ist eine Programmiersprache entwickelt von Microsoft und bilet eine Übermenge zu JavaScript. Es fügt statische Typen zu JavaScript hinzu. Dadurch ist Typensicherheit gewährleistet und werden schon im Vorfeld viele potenzielle Fehlerquellen eliminiert, da die IDE und der TypeScript-(Trans)compiler darauf hinweisen. Außerdem ermöglicht TypeScript, sinnvolle und automatische Code-Vorschläge in der IDE. 
 Mittels eines Plugins für Rollup, das den TypeScript-(Trans)compiler aufruft, wird der TypeScript-Code dann in reines JavaScript transpiled. 
 
-\paragraph{Babel} Babel ist ebenfalls ein Transcompiler, oft auch Transpiler genannt, der JavaScript transformieren kann. Babel wird hauptsächlich dafür verwendet modernen JavaScript-Code so zu transformieren, dass dieser auch mit älteren Browsern kompatibel ist. Dafür gibt es allerhand Plugins, die diese Transformationen vornehmen. Darüber hinaus gibt es Presets, also Zusammenschlüsse aus Plugins und vordefinierten Einstellungen. Eines davon ist das Preset \textbf{@babel/preset-env}, das in diesem Projekt zum Einsatz kommen soll. Für dieses Preset wird eine sog. Browserslist-Konfiguration definiert. In dieser wird festgelegt, mit welchen Browsern der Code am Ende kompatibel sein muss. Neben reinen syntaktischen Features, wie z.B. Pfeil-Funktionen, async/await etc., erkennt dieses Preset außerdem, wenn Code-Featuers verwendet wurden, die nicht von allen Browsern aus der Browserslist Konfiguration unterstützt werden und importiert automatisch die entsprechenden sog. Polyfills - also Third-Party Implementierungen der Features - aus dem Open Source Projekt \textbf{core-js}. Diese Polyfills treten dann automatisch in Kraft, wenn ein Browser diese Features nicht nativ unterstützt. Z.B. die mit der ES6-Spezifikation (oft auch ES 2015 bezeichnet) eingeführten Array-Funktionen, mit denen man auf funktionale Art mit Arrays umgehen kann oder die ebenfalls mit ES6 eingeführten sog. Promises, mit denen die Arbeit mit asynchronen Operationen sehr vereinfacht wird. Die Browserslist soll so konfiguriert werden, dass alle relevanten Browser, die sich derzeit am Markt befinden unterstützt werden. Das schließt ältere Browser wie den Internet Explorer 11 mit ein, was Teil der Anforderungen ist. 
+\paragraph{Babel} Babel ist ebenfalls ein Transcompiler, oft auch Transpiler genannt, der JavaScript transformieren kann. Babel wird hauptsächlich dafür verwendet modernen JavaScript-Code so zu transformieren, dass dieser auch mit älteren Browsern kompatibel ist. Dafür gibt es allerhand Plugins, die diese Transformationen vornehmen. Darüber hinaus gibt es Presets, also Zusammenschlüsse aus Plugins und vordefinierten Einstellungen. Eines davon ist das Preset \textbf{@babel/preset-env}, das in diesem Projekt zum Einsatz kommen soll. Für dieses Preset wird eine sogenannte Browserslist-Konfiguration definiert. In dieser wird festgelegt, mit welchen Browsern der Code am Ende kompatibel sein muss. Neben reinen syntaktischen Features, wie z.B. Pfeil-Funktionen, async/await etc., erkennt dieses Preset außerdem, wenn Code-Featuers verwendet wurden, die nicht von allen Browsern aus der Browserslist Konfiguration unterstützt werden und importiert automatisch die entsprechenden sogenannten Polyfills - also Third-Party Implementierungen der Features - aus dem Open Source Projekt \textbf{core-js}. Diese Polyfills treten dann automatisch in Kraft, wenn ein Browser die entsprechenden Features nicht nativ unterstützt. Z.B. die mit der \ac{ES6} eingeführten Array-Funktionen oder die ebenfalls mit ES6 eingeführten sogenannten Promises, mit denen die Arbeit mit asynchronen Operationen sehr vereinfacht wird. Die Browserslist soll so konfiguriert werden, dass alle relevanten Browser, die sich derzeit am Markt befinden unterstützt werden. Das schließt ältere Browser wie den Internet Explorer 11 mit ein, was Teil der Anforderungen ist. 
 
-\paragraph{Die Processors} Auch im Frontend soll die Validierung und Verarbeitun mittels Processors geschehen. Processors sollen global in einer Registry registriert werden können. Dafür muss eine API zur verfügung gestellt werden. Processors sollen aus den folgenden vier Hooks bestehen: onPreload, beforeUpload, afterUpload und onValidate.
+\paragraph{Die Processors} Auch im Frontend soll die Validierung und Verarbeitun mittels Processors geschehen. Processors sollen hier jedoch global in einer Registry registriert werden können. Dafür muss eine API zur Verfügung gestellt werden. Processors sollen aus den folgenden vier Hooks bestehen: onPreload, beforeUpload, afterUpload und onValidate.
 
 \begin{itemize}
-	\item onPreload 	– Dieser Hook ist ebenfall für das Vorbereiten des Preloadings verantwortlich
+	\item onPreload 	– Dieser Hook ist auch im Frontend für das Vorbereiten des Preloadings verantwortlich.
 	\item beforeUpload 	– Hier werden die Dateien verarbeitet, die vom User ausgewählt wurden, bevor diese hochgeladen werden. Z.B. Validierung der Dateigröße etc.
-	\item afterUpload 	- Hier können Dinge mit den Dateien angestellt werden, nachdem diese hochgeladen wurden
+	\item afterUpload 	- Hiermit können die Dateien verarbeitet werden, nachdem sie hochgeladen wurden
 	\item onValidate	- Dieser Hook dient auch hier zur abschließenden Validierung. Z.B. wenn ein Formular submitted wird.
 \end{itemize}
 
-\paragraph{Der Fileuploader} Den Kern soll eine Fileuploader-Klasse bilden. Sie soll für die jeweiligen Input-Felder instanziiert werden und ist für die gesammte Abwicklung, also das Preloading, Hochladen und Entfernen von Dateien, verantwortlich. Außerdem soll sie eine API bereit stellen, mit der man auf Änderungen reagieren und Fehler behandeln kann. Zu den Änderungen zählen Dinge wie die Elemente, die sich im Fileuploader befinden, ob ein Request an der Server durchgeführt wird und wie der Fortschritt ist. Diese Daten sollen in einem sog. Store gespeichert werden.
+\paragraph{Der Fileuploader} Den Kern soll eine Fileuploader-Klasse bilden. Sie soll für die jeweiligen Input-Felder instanziiert werden und ist für die gesammte Abwicklung, also das Preloading, Hochladen und Entfernen von Dateien, verantwortlich. Sämtliche Daten sollen in einem sogenannten Store gespeichert werden. Außerdem soll eine API bereit gestellt werden, mit der man auf Änderungen oder Fehler reagieren kann. Zu den Änderungen zählen unter anderem Dinge wie die Elemente, die sich im Fileuploader befinden, ob ein Request an den Server gesendet wird, wie weit der Fortschritt ist etc. Mit dieser API soll es dann möglich sein eine GUI zu realisieren. 
 
-\paragraph{Der Store} Der Zustand - oder State - einer Fileuploader Instanz soll in einem Store verwaltet werden. Dafür soll die Open Source Bibliothek MobX verwendet werden. MobX beschreibt sich selbst als \glqq simple, scalable state management\grqq{}. Es ist eine sehr weit verbreitete Bibliothek für das State Management in JavaScript und basiert auf dem Functional Reactive Programming Pattern. MobX ist sehr unkomplizert und bedarf kaum Boilerplate-Code.
+\paragraph{Der Store} Der Zustand - oder State - einer Fileuploader Instanz soll wie bereits erwähnt in einem Store verwaltet werden. Dafür soll die Open Source Bibliothek MobX verwendet werden. MobX beschreibt sich selbst als ``simple, scalable state management''. Es ist eine sehr weit verbreitete Bibliothek für das State Management in JavaScript und basiert auf dem Functional Reactive Programming Pattern. MobX ist sehr unkomplizert und bedarf kaum Boilerplate-Code.
 
 \subsection{Geschäftslogik}
-\label{sec:Geschaeftslogik}
+\label{sec:Geschaeftslogik} 
 
-\begin{itemize}
-	\item Modellierung und Beschreibung der wichtigsten (!) Bereiche der Geschäftslogik (\zB mit Kom\-po\-nen\-ten-, Klassen-, Sequenz-, Datenflussdiagramm, Programmablaufplan, Struktogramm, \ac{EPK}).
-	\item Wie wird die erstellte Anwendung in den Arbeitsfluss des Unternehmens integriert?
-\end{itemize}
+Zur Modellierung der Geschäftslogik und der Veranschaulichung der Abhängigkeiten und Schnittstellen  wurden für das Backend und das Frontend Komponenten- bzw. Klassendiagramme erstellt. Da das Frontend allerdings nicht vollständig objektorientiert ist und zum Teil modulbasiert wurde dafür lediglich das Komponentendiagramm erstellt. Die Diagramme können im \Anhang{app:Komponentendiagramm} und \Anhang{app:Klassendiagramm} eingesehen werden. 
 
-\paragraph{Beispiel}
-Ein Klassendiagramm, welches die Klassen der Anwendung und deren Beziehungen untereinander darstellt kann im \Anhang{app:Klassendiagramm} eingesehen werden.
+Wählt ein Benutzer eine oder mehrere Dateien aus oder möchte er eine Datei aus der Liste entfernen, soll eine Request mittels Ajax an das Backend gesendet werden und die hochzuladenen Dateien enthalten. Außerdem soll die aktuelle Liste der hochgeladen bzw. vorgeladenen (preloaded) Dateien zusammen mit der Prüfsumme angehängt werden, sofern vorhanden. Dadurch kann dann nach erfolgreicher Validierung die Prüfsumme neu berechnet werden. Neben den Dateien und der Prüfsumme sollen außerdem der eindeutige Key der Konfiguration und eine auszuführende Action angegeben werden. Kommt die Request am Server an, soll der Ajax-Handler die Daten vorbereiten und die entsprechende Action ausführen. Diese sind das Hochladen (upload-Action) und das Entfernen (remove-Action) von Dateien. Diese Actions befinden sich in der Service Klasse. Dem Service sollen die Daten und die entsprechende Konfiguration übermittelt werden, um diese dann validieren und verarbeiten zu können.
 
-\Abbildung{Modulimport} zeigt den grundsätzlichen Programmablauf beim Einlesen eines Moduls als \ac{EPK}.
-\begin{figure}[htb]
-\centering
-\includegraphicsKeepAspectRatio{modulimport.pdf}{0.9}
-\caption{Prozess des Einlesens eines Moduls}
-\label{fig:Modulimport}
-\end{figure}
+Die Upload-Action soll den onUpload-Hook der Processors ausführen, die in der Konfiguration gespeichert sind. Schlägt die Validierung einzelner Dateien fehl, sollen diese entsprechend markiert werden. Schlägt die gesammte Validierung fehlt (z.B. maximale Anzahl überschritten), soll ein Fehler erzeugt werden. Ist mindestens eine Datei valide soll die Prüfsumme berechnet werden. Diese Informationen werden dann zurück an das Frontend gesendet. Das Frontend kann die Daten auswerten, ggf. den State aktualisieren und/oder Fehlermeldungen ausgeben.
 
+Die Remove-Action soll lediglich eine Datei aus der Liste entfernen und die Prüfsumme neu berechnen. Die Datei selbst verbleibt dabei zunächst auf dem System. Das Löschen soll durch externe Prozesse (z.B. Cron-Job) in den Projekten geschehen und ist gegenwärtig nicht Teil der Anforderungen.
+
+Der Service soll außerdem eine Action für das Preloading besitzen, die vom View Helper ausgeführt wird, falls Dateien vorgeladen werden sollen (z.B. der Benutzer möchte eine Gallerie bearbeiten, die bereits Fotos enthält). Für das Preloading besitzen die Processors den onPreload-Hook, der dann vom Service ausgeführt werden soll. Dadurch können z.B. Thumbnails generiert werden o.ä.
 
 \subsection{Maßnahmen zur Qualitätssicherung}
-\label{sec:Qualitaetssicherung}
-\begin{itemize}
-	\item Welche Maßnahmen werden ergriffen, um die Qualität des Projektergebnisses (siehe Kapitel~\ref{sec:Qualitaetsanforderungen}: \nameref{sec:Qualitaetsanforderungen}) zu sichern (\zB automatische Tests, Anwendertests)?
-	\item \Ggfs Definition von Testfällen und deren Durchführung (durch Programme/Benutzer).
-\end{itemize}
+
+Zur Qualitätssicherung werden Code-Reviews und Anwendertests im Zuge der Abnahme durch die Seniorentwickler des Fachbereichs TYPO3 durchgeführt. Dafür erhalten sie Instruktionen, wie das Tool zu konfigurieren und zu bedienen ist und eine auf einem Testserver eingerichtete Testumgebung, wo sie das Tool testen und Anpassungen vornehmen können.
 
 
 \subsection{Pflichtenheft/Datenverarbeitungskonzept}

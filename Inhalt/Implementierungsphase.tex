@@ -2,36 +2,34 @@
 \section{Implementierungsphase} 
 \label{sec:Implementierungsphase}
 
-\subsection{Implementierung der Datenstrukturen}
-\label{sec:ImplementierungDatenstrukturen}
-
-\begin{itemize}
-	\item Beschreibung der angelegten Datenbank (\zB Generierung von \acs{SQL} aus Modellierungswerkzeug oder händisches Anlegen), \acs{XML}-Schemas \usw.
-\end{itemize}
-
-
-\subsection{Implementierung der Benutzeroberfläche}
-\label{sec:ImplementierungBenutzeroberflaeche}
-
-\begin{itemize}
-	\item Beschreibung der Implementierung der Benutzeroberfläche, falls dies separat zur Implementierung der Geschäftslogik erfolgt (\zB bei \acs{HTML}-Oberflächen und Stylesheets).
-	\item \Ggfs Beschreibung des Corporate Designs und dessen Umsetzung in der Anwendung.
-	\item Screenshots der Anwendung
-\end{itemize}
-
-\paragraph{Beispiel}
-Screenshots der Anwendung in der Entwicklungsphase mit Dummy-Daten befinden sich im \Anhang{Screenshots}.
-
-
 \subsection{Implementierung der Geschäftslogik}
 \label{sec:ImplementierungGeschaeftslogik}
 
-\begin{itemize}
-	\item Beschreibung des Vorgehens bei der Umsetzung/Programmierung der entworfenen Anwendung.
-	\item \Ggfs interessante Funktionen/Algorithmen im Detail vorstellen, verwendete Entwurfsmuster zeigen.
-	\item Quelltextbeispiele zeigen.
-	\item Hinweis: Wie in Kapitel~\ref{sec:Einleitung}: \nameref{sec:Einleitung} zitiert, wird nicht ein lauffähiges Programm bewertet, sondern die Projektdurchführung. Dennoch würde ich immer Quelltextausschnitte zeigen, da sonst Zweifel an der tatsächlichen Leistung des Prüflings aufkommen können.
-\end{itemize}
+\subsubsection{Die IDE}
+Als Entwicklungsumgebung wurde PHPStorm verwendet. PHPStorm ist eine kommerzielle IDE entwickelt von Jetbrains. Diese IDE bietet einen großen Funktionsumfang und hervorragende Unterstützung beim Entwickeln von Webprojekten. Wie der Name bereits andeuten lässt, ist PHPStorm gut geeignet für die Entwicklung mit PHP. Da PHPStorm auf WebStorm basiert, liefert es außerdem Tools und Unterstützung für Front-End-Technologien, wie JavaScript und TypeScript.
 
-\paragraph{Beispiel}
-Die Klasse \texttt{Com\-par\-ed\-Na\-tu\-ral\-Mo\-dule\-In\-for\-ma\-tion} findet sich im \Anhang{app:CNMI}.  
+\subsubsection{Implementierung}
+
+\paragraph{Backend} Im ersten Schritt wurde mit der Implementierung der Backend-Logik begonnen. Zunächst wurden die Konfigurations- und Processor-API implementiert, da dies den Grundstein für das Projekt legt. 
+
+Anschließend konnte mit dem View Helper fortgefahren werden. Da ein View Helper normalerweise nur einen HTML-Tag rendert, musste etwas getrickst werden, damit dieser die zwei erforderlichen HTML-Tags rendert. Der View Helper konnte dann in der Testumgebung in ein Template eingebunden werden. 
+
+Im nächsten Schritt konnte damit begonnen werden den Endpoint einzurichten, an den die HTTP-Requests gesendet werden sollen. Dies geschieht, indem im TypoScript einen sogenannter PAGE-Type mit einer eindeutigen Nummer (typeNum) angelegt wird. Dieser PAGE-Type wurde so konfiguriert, dass die handleRequest-Methode des Ajax-Handlers aufgerufen werden soll, sobald ein HTTP-Request an diesen gesendet wird. Dies geschieht mittels des Query-Parameters ?type=[typeNum des PAGE-Types] in der URL. Für das Aufrufen von PHP-Funktionen gibt es den USER- bzw. USER\_INT-Type. In dem Fall wurde USER\_INT-Type verwendet, da dieser im gegensatz zu USER nicht gecached wird. In \Abbildung{typoscript}: TypoScript Konfiguration ist die Konfiguration ersichtlich. 
+
+\begin{figure}[htb]
+\centering
+\caption{TypoScript Konfiguration}
+\includegraphicsKeepAspectRatio{typoscript.png}{0.9}
+\label{fig:typoscript}
+\end{figure}
+
+Nachdem dies erledigt war, konnten der Ajax-Handler, der Service und abschließend die ``Common'' Processor implementiert werden. Damit war das Backend grundsätzlich fertig.
+
+Schwierigkeiten ergaben sich bei der Implementierung der Konfigurations-API, da diese sehr modular aufgebaut ist, es allerdings Stellen gibt, an denen es Abhängigkeiten zu bestimmten Einstellungen gibt. Dabei wurde einiges an Zeit vergeuded, durch häufiges Änderung und Refaktorisieren. Eine entgültuig zufriedenstellende Lösung hat sich dabei dennoch nicht gegeben.
+
+\paragraph{Frontend} Nun konnte mit der Implementierung des Frontends begonnen werden. Das Frontend basiert auf Modulen. Ein Modul ist grundsätzlich eine JavaScript- bzw TypeScript-Datei, die Daten bzw. Funktionen aus anderen Modulen importiert und/oder Daten bzw. Funktionen exportiert, sodass andere Module diese importieren können. Die Implementierung erfolgte Angefangen beim Entry-Point-Modul über die Processors Registry und API gefolgt vom Herzstück, der Fileuploader- und  Store-Klasse. Abschließend wurden die ``Common'' Processors implementiert, die für das Frontend relevant sind.
+
+\subsubsection{Fazit zur Implementierungsphase}
+\label{sec:FazitImplementierung}
+
+Abschließend hat die Implementierungsphase länger gedauert als Ursprünglich geplant. Unter anderem durch Schwierigkeiten bei der Konfigurations-API und einer generell unterschätzten Zeitplanung.
