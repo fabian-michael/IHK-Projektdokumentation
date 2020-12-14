@@ -5,7 +5,7 @@
 \subsection{Zielplattform}
 \label{sec:Zielplattform}
 
-Die Extension soll sowohl unter TYPO3 8.7 als auch unter 9.5 und 10.4 lauffähig sein. Die PHP Version soll 7.2 oder höher sein. Das JavaScript muss mit allen gängigen Browsern (auch Internet Explorer 11) kompatibel sein.
+Die Extension soll sowohl unter TYPO3 8.7 als auch unter 9.5 und 10.x lauffähig sein. Die PHP Version soll 7.2 oder höher sein. Das JavaScript muss mit allen gängigen Browsern (auch Internet Explorer 11) kompatibel sein. 
 
 
 \subsection{Architekturdesign}
@@ -14,7 +14,7 @@ Die Extension soll sowohl unter TYPO3 8.7 als auch unter 9.5 und 10.4 lauffähig
 \subsubsection{Backend}
 \label{sec:Backend}
 
-\paragraph{Die Configuration Registry} Die Verwaltung von Konfiguration soll zentral geschehen. Dafür solleine Configuration Registry als Singleton implementiert werden. Konfigurationen sollen mittels eines eindeutigen Keys registriert werden. In einer Konfiguration sollen dann sogenannte Processors definiert und Settings für diese festgelegt werden können. Außerdem soll es möglich sein bestimme Settings für das Frontend auszuschließen. Dafür soll ein entsprechendes Flag gesetzt werden können. 
+\paragraph{Die Configuration Registry} Die Verwaltung von Konfiguration soll zentral geschehen. Dafür solleine Configuration Registry als Singleton implementiert werden. Konfigurationen sollen mittels eines eindeutigen Keys registriert werden können. In einer Konfiguration sollen dann sogenannte Processors definiert und Settings für diese festgelegt werden können. Außerdem soll es möglich sein bestimme Settings für das Frontend auszuschließen. Dafür soll ein entsprechendes Flag gesetzt werden können. 
 
 \Abbildung{beispiel_konfiguration} zeigt beispielhaft die Struktur einer Konfiguration.
 \begin{figure}[htb]
@@ -32,23 +32,23 @@ Die Extension soll sowohl unter TYPO3 8.7 als auch unter 9.5 und 10.4 lauffähig
 	\item onValidate	- Dieser Hook dient zur abschließenden Validierung. Z.B. wenn ein Formular submitted wird.
 \end{itemize}
 
-Ziel dieser herangehensweise ist es, die Anforderung zu erfpllen, dass das Validieren und Verarbeiten der Dateien möglichst modular und erweiterbar ist.
+Ziel dieser herangehensweise ist es, die Anforderung zu erfüllen, dass das Validieren und Verarbeiten der Dateien modular und erweiterbar sein soll.
 
 \paragraph{Der Ajax-Handler} Als Einstiegspunkt für die HTTP-Requests soll eine Ajax-Handler-Klasse dienen. Dafür muss im TypoScript (nicht zu verwechseln mit TypeScript) eine entsprechende Konfiguration angelegt werden. TypoScript ist eine TYPO3 eigene Konfigurationssprache, mit der das Rendering bzw. die Ausgabe gesteuert wird.
 
-\paragraph{Der Service} Das Zentrum soll eine Service-Klasse bilden, die für die Verarbeitung und die Integritätssicherung der Daten zuständig ist und afür die entsprechenden Aufgaben delegiert, die dafür notwendig sind. Beispielsweise die entsprechenden Hooks der Processors ausführen etc. Zur Integritätssicherung soll bei erfolgreicher Validierung mindestens einer Datei eine Prüfsumme berechnet und diese an das Frontend zurück gesendet werden.
+\paragraph{Der Service} Das Zentrum soll eine Service-Klasse bilden, die für die Verarbeitung und die Integritätssicherung der Daten zuständig ist und dafür die entsprechenden Aufgaben delegiert, die dafür notwendig sind. Beispielsweise die entsprechenden Hooks der Processors ausführen etc. Zur Integritätssicherung soll bei erfolgreicher Validierung mindestens einer Datei eine Prüfsumme berechnet und diese neben der Dateiliste an das Frontend zurück gesendet werden.
 
 \subsubsection{Frontend}
 \label{sec:Frontend}
 
-\paragraph{HTML} Im HTML sollen zwei Elemente erzeugt werden. Zum einen ein File-Input-Element, das dem Benutzer ermöglicht Dateien auszuwählen und zum anderen ein Hidden-Input-Element, das später die relevanten Daten speichert, die beim Formular-Submit an den jeweiligen Controller gesendet werden. 
+\paragraph{HTML} Im HTML sollen zwei Elemente erzeugt werden. Zum einen ein File-Input-Element, das dem Benutzer ermöglicht Dateien auszuwählen und zum anderen ein Hidden-Input-Element, das später in ein TYPO3 Formular integriert werden kann und die relevanten Daten hält, die beim Formular-Submit an den jeweiligen Controller, der für das Formular verantwortlich ist gesendet werden. 
 
-\paragraph{Module-Bundler} Für das Frontend stellte sich zunächst die Frage, mit welchem Build-Tool bzw. Module-Bundler das JavaScript transpiled und gebündelt werden soll. Ein Module-Bundler löst Modul-Ab\-häng\-ig\-kei\-ten auf und vereint alles in einem einzigen sogenannten Bundle. Er führt außerdem Optimierungen durch, wie z.B. das sogenannte Tree-Shaking oder auch Dead Code Elimination genannt. Zu den drei relevantesten bundlern zählen Webpack, Parcel und Rollup. Alle drei sind hervorragende Tools, die ihre Stärken und Schwächen haben. Nach der Nutzwertanalyse fiel die Entscheidung für das Projekt auf Rollup. Mit Rollup wurde das beste Ergebnis erzielt. Es ist sehr gut für diesen Zweck geeignet. Die Bundle-Größe ist zwar im Gegensatz zu Parcel etwas größer, allerdings ist dies vertretbar und die Vorteile überwiegen. Mit Rollup können sehr einfach unterschiedliche Bundles erzeugt werden, wie ein statisches Bundle, das in einer Website als statische Datei eingebunden werden kann und ein Bundle, das als Modul in ein anderes importiert werden kann. Auch in den anderen Punkten konnte Rollup überzeugen. Es ist sehr gut dokumentiert, es ist einfach konfigurierbar und sehr wichtig ist außerdem, dass, wenn das Bundle als statische Datei in ein Projekt eingebunden wird, die IDE den Code so gut es geht nachvollziehen und vervollständigen kann. Das ist mit Rollup ohne Probleme möglich. Mit Webpack war dies nicht gut möglich und mit Parcel gar nicht möglich. 
+\paragraph{Module-Bundler} Für das JavaScript stellte sich zunächst die Frage, mit welchem Build-Tool bzw. Module-Bundler das JavaScript transpilliert\footnote{auch transkompilieren genannt: Convertiert Source Code in ein anderes Format bzw. Sprache} und gebündelt werden soll. Ein Module-Bundler löst Modul-Ab\-häng\-ig\-kei\-ten auf und vereint alles in einem einzigen sogenannten Bundle. Er führt außerdem Optimierungen durch, wie z.B. das sogenannte Tree-Shaking\footnote{Auch Dead Code Elimination genannt: Schließt nicht verwendeten Code aus dem Bundle aus}. Zu den drei relevantesten bundlern zählen Webpack, Parcel und Rollup. Alle drei sind hervorragende Tools, die ihre Stärken und Schwächen haben. Nach der Nutzwertanalyse fiel die Entscheidung für das Projekt auf Rollup. Mit Rollup wurde das beste Ergebnis erzielt. Die Bundle-Größe ist zwar im Gegensatz zu Parcel etwas größer, allerdings ist dies in einem vertretbaren Rahmen und die Vorteile überwiegen. Mit Rollup können sehr einfach unterschiedliche Arten von Bundles erzeugt werden, wie ein statisches Bundle, das in einer Website als statische Datei eingebunden werden kann und ein Bundle, das als Modul in ein anderes importiert werden kann. Auch in den anderen Punkten konnte Rollup überzeugen. Es ist sehr gut dokumentiert, es ist einfach konfigurierbar und sehr wichtig ist außerdem, dass, wenn das Bundle als statische Datei in ein Projekt eingebunden wird, die IDE den Code so gut es geht nachvollziehen und automatisch vervollständigen kann. Das ist mit Rollup ohne Probleme möglich. Mit Webpack war dies nicht gut und mit Parcel kaum möglich. Das hängt damit zusammen, wie der Bundler den erzeugten Code im Bundle formatiert und organisiert.
 
 \tabelle{Entscheidungsmatrix Module Bundler}{tab:Entscheidungsmatrix}{Nutzwert.tex}
 
-\paragraph{TypeScript} Der Source Code soll vollständig in TypeScript geschrieben werden. TypeScript ist eine Programmiersprache entwickelt von Microsoft und bilet eine Übermenge zu JavaScript. Es fügt statische Typen zu JavaScript hinzu. Dadurch ist Typensicherheit gewährleistet und werden schon im Vorfeld viele potenzielle Fehlerquellen eliminiert, da die IDE und der TypeScript-(Trans)compiler darauf hinweisen. Außerdem ermöglicht TypeScript, sinnvolle und automatische Code-Vorschläge in der IDE. 
-Mittels eines Plugins für Rollup, das den TypeScript-(Trans)compiler aufruft, wird der TypeScript-Code dann in reines JavaScript transpiled. 
+\paragraph{TypeScript} Der Source Code soll vollständig in TypeScript geschrieben werden. TypeScript ist eine Programmiersprache entwickelt von Microsoft und bilet eine Übermenge zu JavaScript. Es fügt statische Typen zu JavaScript hinzu, wodurch Typensicherheit gewährleistet ist. Dadurch werden schon im Vorfeld viele potenzielle Fehlerquellen eliminiert, da die IDE und der TypeScript-(Trans-)Compiler darauf hinweisen können. Außerdem ermöglicht TypeScript, sinnvolle und automatische Code-Vorschläge in der IDE. 
+Mittels eines Plugins für Rollup, das den TypeScript-Compiler aufruft, wird der TypeScript-Code dann in reines JavaScript transpilliert. 
 
 \paragraph{Babel} Babel ist ebenfalls ein Transcompiler, oft auch Transpiler genannt, der JavaScript transformieren kann. Babel wird hauptsächlich dafür verwendet modernen JavaScript-Code so zu transformieren, dass dieser auch mit älteren Browsern kompatibel ist. Dafür gibt es allerhand Plugins, die diese Transformationen vornehmen. Darüber hinaus gibt es Presets, also Zusammenschlüsse aus Plugins und vordefinierten Einstellungen. Eines davon ist das Preset \textbf{@babel/preset-env}, das in diesem Projekt zum Einsatz kommen soll. Für dieses Preset wird eine sogenannte Browserslist-Konfiguration definiert. In dieser wird festgelegt, mit welchen Browsern der Code am Ende kompatibel sein muss. Neben reinen syntaktischen Features, wie z.B. Pfeil-Funktionen, async/await etc., erkennt dieses Preset außerdem, wenn Code-Featuers verwendet wurden, die nicht von allen Browsern aus der Browserslist Konfiguration unterstützt werden und importiert automatisch die entsprechenden sogenannten Polyfills - also Third-Party Implementierungen der Features - aus dem Open Source Projekt \textbf{core-js}. Diese Polyfills treten dann automatisch in Kraft, wenn ein Browser die entsprechenden Features nicht nativ unterstützt. Z.B. die mit der \ac{ES6} eingeführten Array-Funktionen oder die ebenfalls mit ES6 eingeführten sogenannten Promises, mit denen die Arbeit mit asynchronen Operationen sehr vereinfacht wird. Die Browserslist soll so konfiguriert werden, dass alle relevanten Browser, die sich derzeit am Markt befinden unterstützt werden. Das schließt ältere Browser wie den Internet Explorer 11 mit ein, was Teil der Anforderungen ist. 
 
@@ -63,7 +63,7 @@ Mittels eines Plugins für Rollup, das den TypeScript-(Trans)compiler aufruft, w
 
 \paragraph{Der Fileuploader} Den Kern soll eine Fileuploader-Klasse bilden. Sie soll für die jeweiligen Input-Felder instanziiert werden und ist für die gesammte Abwicklung, also das Preloading, Hochladen und Entfernen von Dateien, verantwortlich. Sämtliche Daten sollen in einem sogenannten Store gespeichert werden. Außerdem soll eine API bereit gestellt werden, mit der man auf Änderungen oder Fehler reagieren kann. Zu den Änderungen zählen unter anderem Dinge wie die Elemente, die sich im Fileuploader befinden, ob ein Request an den Server gesendet wird, wie weit der Fortschritt ist etc. Mit dieser API soll es dann möglich sein eine GUI zu realisieren. 
 
-\paragraph{Der Store} Der Zustand - oder State - einer Fileuploader Instanz soll wie bereits erwähnt in einem Store verwaltet werden. Dafür soll die Open Source Bibliothek MobX verwendet werden. MobX beschreibt sich selbst als ``simple, scalable state management''. Es ist eine sehr weit verbreitete Bibliothek für das State Management in JavaScript und basiert auf dem Functional Reactive Programming Pattern. MobX ist sehr unkomplizert und bedarf kaum Boilerplate-Code.
+\paragraph{Der Store} Der Zustand - oder State - einer Fileuploader Instanz soll wie bereits erwähnt in einem Store verwaltet werden. Dafür soll die Open Source Bibliothek MobX verwendet werden. Es ist eine sehr weit verbreitete Bibliothek für das State Management in JavaScript und beschreibt sich selbst als ``simple, scalable state management''. State Management kann in JavaScript sehr komplex werden und es besteht häufig die Gefahr von inkonsistenen Zuständen innerhalb einer Anwendung. MobX will dafür eine Lösung bieten und inkonsistente Zustände von vorherein unmöglich machen. MobX basiert auf dem Functional Reactive Programming Paradigma. Es verbindet reaktive Programmierung mit asynchronen Datenströmen und verwendet Bausteine der funktionalen Programmierung. Kurz zusammengefasst bedeutet dies, dass Änderungen im Zustand eines Subjektes in einem asynchronen Datenstrom erfasst und funktional verarbeitet werden können.
 
 \subsection{Geschäftslogik}
 \label{sec:Geschaeftslogik} 
@@ -85,9 +85,5 @@ Zur Qualitätssicherung werden Code-Reviews und Anwendertests im Zuge der Abnahm
 
 \subsection{Pflichtenheft/Datenverarbeitungskonzept}
 \label{sec:Pflichtenheft}
-\begin{itemize}
-	\item Auszüge aus dem Pflichtenheft/Datenverarbeitungskonzept, wenn es im Rahmen des Projekts erstellt wurde.
-\end{itemize}
 
-\paragraph{Beispiel}
-Ein Beispiel für das auf dem Lastenheft (siehe Kapitel~\ref{sec:Lastenheft}: \nameref{sec:Lastenheft}) aufbauende Pflichtenheft ist im \Anhang{app:Pflichtenheft} zu finden.
+Auf die Erstellung eines Pflichtenhefts wurde verzichtet, da auf basis des Lastenheftes und der Entwürfe bereits hinreichend Informationen für die Implementierung zur Verfügung standen.

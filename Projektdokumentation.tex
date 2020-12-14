@@ -78,17 +78,15 @@
 \pagenumbering{arabic}
 \input{Inhalt.tex}
 
-% Literatur ------------------------------------------------------------------
-\clearpage
-\renewcommand{\refname}{Literaturverzeichnis}
-\bibliography{Bibliographie}
-\bibliographystyle{Allgemein/natdin} % DIN-Stil des Literaturverzeichnisses
-\input{Erklaerung}
-
 % Anhang ---------------------------------------------------------------------
 \clearpage
 \appendix
 \pagenumbering{roman}
 \input{Anhang}
+
+% Quellen ---------------------------------------------------------------------
+\clearpage
+\pagenumbering{roman}
+\input{Quellen.tex}
 
 \end{document}
