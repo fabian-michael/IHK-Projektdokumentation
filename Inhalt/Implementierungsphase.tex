@@ -25,7 +25,7 @@ Im nächsten Schritt konnte damit begonnen werden den Endpoint einzurichten, an 
 
 Nachdem dies erledigt war, konnten der Ajax-Handler, der Service und abschließend die ``Common'' Processor implementiert werden. Damit war das Backend grundsätzlich fertig.
 
-Schwierigkeiten ergaben sich bei der Implementierung der Konfigurations-API, da diese sehr modular aufgebaut ist, es allerdings Stellen gibt, an denen es Abhängigkeiten zu bestimmten Einstellungen gibt. Dabei wurde einiges an Zeit vergeuded, durch häufiges Änderung und Refaktorisieren. Eine entgültuig zufriedenstellende Lösung hat sich dabei dennoch nicht gegeben.
+Schwierigkeiten ergaben sich bei der Implementierung der Konfigurations-API, da diese sehr modular aufgebaut ist, es allerdings Stellen gab, an denen es Abhängigkeiten zu bestimmten Einstellungen gab. Dabei wurde einiges an Zeit vergeuded, durch häufiges Änderung und Refaktorisieren, bis sich am Ende eine zufriedenstellende Lösung ergeben hat.
 
 \paragraph{Frontend} Nun konnte mit der Implementierung des Frontends begonnen werden. Das Frontend basiert auf Modulen. Ein Modul ist grundsätzlich eine JavaScript- bzw TypeScript-Datei, die Daten bzw. Funktionen aus anderen Modulen importiert und/oder Daten bzw. Funktionen exportiert, sodass andere Module diese importieren können. Die Implementierung erfolgte Angefangen beim Entry-Point-Modul über die Processors Registry und API gefolgt vom Herzstück, der Fileuploader- und  Store-Klasse. Abschließend wurden die ``Common'' Processors implementiert, die für das Frontend relevant sind.
 
